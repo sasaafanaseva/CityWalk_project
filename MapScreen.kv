@@ -1,0 +1,31 @@
+<MapScreen>:
+    button: button_id
+    label: label_id
+    text_input: text_input_id
+
+    MDRoundFlatIconButton:
+        id: button_id
+        text: "Press"
+        size_hint: (.15, .15)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+        font_size: 30
+        theme_text_color: "Custom"
+        text_color: "grey"
+        icon: "android"
+        on_release: root.btn_press()
+
+    MDLabel:
+        id: label_id
+        text: "CityWalk"
+        font_size: 30
+        halign: "center"
+        pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+
+
+    MDTextField:
+        id: text_input_id
+        multiline: False
+        font_size: 30
+        size_hint_x: .5
+        pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+        hint_text: 'Введите адрес'

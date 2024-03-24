@@ -1,0 +1,26 @@
+<MainScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: 'Please login'
+        
+        TextInput:
+            id: name
+
+            multiline: False
+
+        TextInput:
+            id: password
+
+            multiline: False
+            
+        Button:
+            text: 'Login'
+            on_release: root.manager.current = ''
+
+        Button:
+            text: 'Register'
+            on_release: root.manager.current = 'register'
+
+
