@@ -1,0 +1,63 @@
+
+<RouteScreen>:
+
+    MDNavigationBar:
+        size_hint: 1, 0.07
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'weather'
+            MDNavigationItemIcon:
+                icon: "weather-partly-cloudy"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'route'
+            MDNavigationItemIcon:
+                icon: "map-search-outline"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'recomend'
+            MDNavigationItemIcon:
+                icon: "star-four-points"
+
+    FloatLayout:
+        orientation: 'vertical'
+
+        MDLabel:
+            id: label_id
+            text: "CityWalk"
+            font_size: 30
+            halign: "center"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+            text_color: "white"
+
+
+        MDTextField:
+            id: text_input_a_id
+            multiline: False
+            font_size: 30
+            size_hint_x: 0.3
+            pos_hint: {'center_x': 0.5, 'top': 0.7}
+            hint_text: 'откуда'
+
+        MDTextField:
+            id: text_input_b_id
+            multiline: False
+            font_size: 30
+            size_hint_x: .3
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            hint_text: 'куда'
+
+
+        MDButton:
+            style: "elevated"
+            size_hint: (0.15, 0.15)
+            pos_hint: {"center_x": .5, "center_y": .35}
+            on_release: root.Push()
+
+            MDButtonIcon:
+                icon: "android"
+            MDButtonText:
+                id: button_id
+                text: "Create"
+                font_size: 30
+                text_color: "purple"
