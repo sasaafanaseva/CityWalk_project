@@ -13,7 +13,7 @@
 Для запуска нужно установить Kivy и KivyMD последних версий, пример для KivyMD:
 git clone https://github.com/kivymd/KivyMD.git --depth 1 \
 cd KivyMD \
-pip install . \
+pip install . 
 
 Помимо этого импортируются webview, requests
 Также обязательно подключиться к базе и создать таблицу weather_recommend.
