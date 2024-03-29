@@ -1,0 +1,32 @@
+<WeatherScreen>:
+
+    MDLabel:
+        text: "Weather"
+        font_size: 30
+        halign: "center"
+        pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+    MDButton:
+        text: 'Oбновить'
+        halign: "center"
+        pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+        on_release: root.manager.current = 'route'
+
+
+    MDNavigationBar:
+        size_hint: 1, 0.07
+        MDNavigationItem:
+            on_release: root.manager.current = 'weather'
+            MDNavigationItemIcon:
+                icon: "weather-partly-cloudy"
+    
+        MDNavigationItem:
+            on_release: root.manager.current = 'route'
+            MDNavigationItemIcon:
+                icon: "map-search-outline"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'recomend'
+            MDNavigationItemIcon:
+                icon: "star-four-points"
+
+
