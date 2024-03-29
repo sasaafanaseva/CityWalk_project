@@ -2,8 +2,8 @@
 
 проект основывается на библиотеке для создания android приложений: KivyMd =>
 1. файлы с отображением экранов и кнопок
-   - MainScreen.kv -- экран регистрации или входа в аккаунт
-   - WeatherScreen.kv -- экран погоды
+   - MainScreen.kv -- экран регистрации или входа в аккаунт 
+   - WeatherScreen.kv -- экран погоды 
    - RouteScreen.kv -- составление маршрута и кнопка, открывающая карту
    - RecomendScreen.kv -- экран с рекомендациями для пользователя
 2. файл main.py с реализацией всех функций (для запуска нужны соответствующие импортированные библиотеки и API-KEYS от Яндекс Javascript-api, Яндекс поиск по организациям, Погода openweathermap )
@@ -11,9 +11,9 @@
 
 
 Для запуска нужно установить Kivy и KivyMD последних версий, пример для KivyMD:
-git clone https://github.com/kivymd/KivyMD.git --depth 1
-cd KivyMD
-pip install .
+git clone https://github.com/kivymd/KivyMD.git --depth 1 \
+cd KivyMD \
+pip install . \
 
 Помимо этого импортируются webview, requests
 Также обязательно подключиться к базе и создать таблицу weather_recommend.
