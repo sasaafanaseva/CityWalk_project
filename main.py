@@ -11,10 +11,77 @@ appid = "our_api_key"
 import requests
 
 class RegisterScreen(Screen):
-    pass
+    
+    def registration(self):
+
+        self.label.text = 'Sign up'
+        email = self.email.text
+        password_1 = self.password_1.text
+        password_2 = self.password_2.text
+
+        if password_1 == '' or password_2 == '':
+            self.password_2.hint_text = 'no password'
+            self.password_1.hint_text = 'no password'
+        elif password_1 != password_2:
+            self.label.text = 'passwords not equal'
+
+        conn = psycopg2.connect(dbname='', user='', password='', host='')
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+        existing_user = cur.fetchone()
+
+        if existing_user is None:
+
+            hashed_password = bcrypt.hashpw(password_1.encode('utf-8'), bcrypt.gensalt())
+            cur.execute("INSERT INTO users (email, password) VALUES(%s, %s)", (email, hashed_password))
+            conn.commit()
+
+            cur.close()
+            conn.close()
+            return MainScreen()
+            
+
+        else:
+            self.label.text = 'this email already used'
+
+        cur.close()
+        conn.close()
+
 
 class MainScreen(Screen):
-    pass
+    
+    def login(self):
+        try:
+            self.label_log.text = 'Please login'
+            name = str(self.name.text)
+            password = str(self.password.text)
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            conn = psycopg2.connect(dbname='', user='', password='', host='')
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM users WHERE email = %s ", (email,))
+            existing_user = cur.fetchone()
+
+            if existing_user is None:
+                self.label_log.text = 'No user with that email'
+                cur.close()
+                conn.close()
+
+            else:
+                cur.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, hashed_password))
+                existing_user = cur.fetchone()
+
+                if existing_user is None:
+                    self.label_log.text = 'Password is incorrect'
+                    cur.close()
+                    conn.close()
+                else:
+                    cur.close()
+                    conn.close()
+                    return RecomendScreen()
+
+        except:
+            print('can\'t use users db')
+
 
 
 class MapScreen(Screen):
@@ -220,7 +287,19 @@ class RouteScreen(Screen):
 
 
 class RecomendScreen(Screen):
-    pass
+    
+    def get_recomendations(self):
+        try:
+        conn = psycopg2.connect(dbname='', user='', password='', host='')
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM recomendations)
+        self.recomendation_1.text = cur[0]
+        self.recomendation_2.text = cur[1]
+        cur.close()
+        conn.close()
+        except:
+            print('can\'t use rec db')
+            
 
 class MyApp(MDApp):
     title = 'My app'
