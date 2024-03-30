@@ -10,6 +10,12 @@ CREATE TABLE weather_recommend (
 );
 
 
+CREATE TABLE users (
+    email TEXT PRIMARY KEY,
+    password TEXT
+);
+
+
 INSERT INTO weather_recommend (temp, description, recommend) VALUES (-3, 'пасмурно', 'на улице прохладно, укутайтесь потеплее');
 INSERT INTO weather_recommend (temp, description, recommend) VALUES (-3, 'небольшой снег', 'не забудьте взять шапку и шарф, ожидается снег');
 INSERT INTO weather_recommend (temp, description, recommend) VALUES (-3, 'небольшой дождь', 'на улице мокрый снег, наденьте непромокаемую обувь!');
