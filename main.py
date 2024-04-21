@@ -7,82 +7,12 @@ from KivyMD.kivymd.uix.snackbar import MDSnackbar, MDSnackbarSupportingText, MDS
     MDSnackbarActionButton, MDSnackbarActionButtonText
 import psycopg2
 from psycopg2.extras import NamedTupleCursor
-appid = "our_api_key"
 import requests
 
 class RegisterScreen(Screen):
-    
-    def registration(self):
-
-        self.label.text = 'Sign up'
-        email = self.email.text
-        password_1 = self.password_1.text
-        password_2 = self.password_2.text
-
-        if password_1 == '' or password_2 == '':
-            self.password_2.hint_text = 'no password'
-            self.password_1.hint_text = 'no password'
-        elif password_1 != password_2:
-            self.label.text = 'passwords not equal'
-
-        conn = psycopg2.connect(dbname='', user='', password='', host='')
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
-        existing_user = cur.fetchone()
-
-        if existing_user is None:
-
-            hashed_password = bcrypt.hashpw(password_1.encode('utf-8'), bcrypt.gensalt())
-            cur.execute("INSERT INTO users (email, password) VALUES(%s, %s)", (email, hashed_password))
-            conn.commit()
-
-            cur.close()
-            conn.close()
-            return MainScreen()
-            
-
-        else:
-            self.label.text = 'this email already used'
-
-        cur.close()
-        conn.close()
-
-
+    pass
 class MainScreen(Screen):
-    
-    def login(self):
-        try:
-            self.label_log.text = 'Please login'
-            name = str(self.name.text)
-            password = str(self.password.text)
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            conn = psycopg2.connect(dbname='', user='', password='', host='')
-            cur = conn.cursor()
-            cur.execute("SELECT * FROM users WHERE email = %s ", (email,))
-            existing_user = cur.fetchone()
-
-            if existing_user is None:
-                self.label_log.text = 'No user with that email'
-                cur.close()
-                conn.close()
-
-            else:
-                cur.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, hashed_password))
-                existing_user = cur.fetchone()
-
-                if existing_user is None:
-                    self.label_log.text = 'Password is incorrect'
-                    cur.close()
-                    conn.close()
-                else:
-                    cur.close()
-                    conn.close()
-                    return RecomendScreen()
-
-        except:
-            print('can\'t use users db')
-
-
+    pass
 
 class MapScreen(Screen):
     pass
@@ -93,7 +23,7 @@ class WeatherScreen(Screen):
         try:
             res = requests.get("http://api.openweathermap.org/data/2.5/find",
                                params={'q': s_city_name, 'type': 'like', 'units': 'metric', 'lang': 'ru',
-                                       'APPID': appid})
+                                       'APPID': "2b7382bcf96880be18e9dc1be22b5287"})
             data = res.json()
             cities = ["{} ({})".format(d['name'], d['sys']['country'])
                       for d in data['list']]
@@ -106,30 +36,31 @@ class WeatherScreen(Screen):
         assert city_id != 0
         return city_id
 
-    def request_forecast(self, city_id, time):
+    def request_forecast(self, city_id, time, t):
         try:
             res = requests.get("http://api.openweathermap.org/data/2.5/forecast",
-                               params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID': appid,
+                               params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID':  "2b7382bcf96880be18e9dc1be22b5287",
                                        'dt': '2024-03-30'})
             data = res.json()
             for i in data['list']:
-                if (i['dt_txt'][:10] == time and i['dt_txt'][11:16] == '15:00'):
-                    print((i['dt_txt']), i['weather'][0]['description'], i['main']['temp'])
+                if (i['dt_txt'][:10] == time and i['dt_txt'][11:16] == t):
+                    #print((i['dt_txt']), i['weather'][0]['description'], i['main']['temp'])
                     return i['main']['temp'], i['weather'][0]['description']
         except Exception as e:
             print("Exception (forecast):", e)
             pass
 
-    def recomendation_from_db(self, temperature, description):
+    def recomendation_from_db(self, temperature, description, ind):
         try:
             # пытаемся подключиться к базе данных
-            conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
+            conn = psycopg2.connect(dbname='postgres', user='marininadarasergeevna', password='Barenu234', host='localhost',
                                     port='5432', options='-c search_path=project_db')
             conn.autocommit = True
             cursor = conn.cursor(cursor_factory=NamedTupleCursor)
             temp = (round(temperature),)
             desc = (description,)
-            cursor.execute('SELECT * FROM weather_recommend WHERE temp=(%s) AND description=(%s)', (temp, desc))
+            cursor.execute('SELECT * FROM weather_recommend WHERE temp=(%s) AND description=(%s) AND ind=(%s)',
+                           (temp, desc, ind))
             recomendation = cursor.fetchall()[0][3]
             cursor.close()  # закрываем курсор
             conn.close()  # закрываем подключение
@@ -145,16 +76,36 @@ class WeatherScreen(Screen):
     def get_weather(self, date):
         s_city_name = "Saint Petersburg, Ru"
         city_id = self.get_city_id(s_city_name)
-        mass = self.request_forecast(city_id, time=self.get_time(date))
-        recomendation = self.recomendation_from_db(temperature=mass[0], description=mass[1])
-        return recomendation, mass[0]
+        mass1 = []
+        mass2 = []
+        mass3 = []
+        for i in range(1, 4):
+            if i == 1:
+                mass = self.request_forecast(city_id, time=self.get_time(date), t="09:00")
+                recomendation = self.recomendation_from_db(temperature=mass[0], description=mass[1], ind=1)
+                mass1.append([recomendation, mass[0]])
+            if i == 2:
+                mass = self.request_forecast(city_id, time=self.get_time(date), t="15:00")
+                recomendation = self.recomendation_from_db(temperature=mass[0], description=mass[1], ind=2)
+                mass2.append([recomendation, mass[0]])
+            if i == 3:
+                mass = self.request_forecast(city_id, time=self.get_time(date), t="21:00")
+                recomendation = self.recomendation_from_db(temperature=mass[0], description=mass[1], ind=3)
+                mass3.append([recomendation, mass[0]])
+        print(mass1, mass2, mass3)
+        return mass1, mass2, mass3
 
 
     def on_ok(self, instance_date_picker):
         instance_date_picker.dismiss()
         recomend = self.get_weather(instance_date_picker.get_date())
-        temp = str(recomend[1])
-        desc = str(recomend[0])
+        temp_9 = str(recomend[0][1])
+        desc_9 = str(recomend[0][0])
+        temp_15 = str(recomend[1][1])
+        desc_15 = str(recomend[1][0])
+        temp_21 = str(recomend[2][1])
+        desc_21 = str(recomend[2][0])
+
         snackbar = MDSnackbar(
             MDSnackbarText(
                 text="на дату " + "".join(str(date) for date in instance_date_picker.get_date()) + "\n" + "температура будет около " + temp,
@@ -198,7 +149,7 @@ class RouteScreen(Screen):
 
     def get_points(self):
 
-        url = 'https://search-maps.yandex.ru/v1/?&type=biz&lang=ru_RU&apikey=our_api_key'
+        url = 'https://search-maps.yandex.ru/v1/?&type=biz&lang=ru_RU&apikey=91165e16-5d01-4ca1-8a5d-49779363a0f8'
         point_a = [0,0]
         point_b = [0,0]
         try:
@@ -249,7 +200,7 @@ class RouteScreen(Screen):
 
         <body>
             <div id="map" style="width: 650px; height: 550px"></div>
-            <script src="https://api-maps.yandex.ru/2.1/?apikey=API-KEY&lang=ru_RU" type="text/javascript">
+            <script src="https://api-maps.yandex.ru/2.1/?apikey=50249262-df67-4c59-9a72-639cc6170daf&lang=ru_RU" type="text/javascript">
             </script>
             <script type="text/javascript">
             ymaps.ready(function () {
@@ -287,19 +238,7 @@ class RouteScreen(Screen):
 
 
 class RecomendScreen(Screen):
-    
-    def get_recomendations(self):
-        try:
-        conn = psycopg2.connect(dbname='', user='', password='', host='')
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM recomendations)
-        self.recomendation_1.text = cur[0]
-        self.recomendation_2.text = cur[1]
-        cur.close()
-        conn.close()
-        except:
-            print('can\'t use rec db')
-            
+    pass
 
 class MyApp(MDApp):
     title = 'My app'
