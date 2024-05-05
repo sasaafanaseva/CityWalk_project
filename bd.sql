@@ -11,12 +11,15 @@ CREATE TABLE weather_recommend (
     ind INTEGER
 );
 
-
-CREATE TABLE users (
-    email TEXT PRIMARY KEY,
-    password TEXT
+CREATE TABLE history (
+    id SERIAL PRIMARY KEY,
+    from TEXT,
+    to TEXT,
+    date DATE,
 );
 
+
+INSERT INTO history (from, to, date) VALUES ("Вязовая 10", "Золотое яблоко", 06.05.24);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'пасмурно', 'Утром будет прохладно, рекомендуем надеть теплую кофту или свитер.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'небольшой снег', 'Утром ожидается мокрый снег, рекомендуем надеть тёплый свитер и непромокаемую обувь.', 1);
