@@ -8,6 +8,8 @@ from KivyMD.kivymd.uix.snackbar import MDSnackbar, MDSnackbarSupportingText, MDS
 import psycopg2
 from psycopg2.extras import NamedTupleCursor
 import requests
+from kivy.metrics import dp
+
 
 class RegisterScreen(Screen):
     pass
@@ -44,7 +46,7 @@ class WeatherScreen(Screen):
             data = res.json()
             for i in data['list']:
                 if (i['dt_txt'][:10] == time and i['dt_txt'][11:16] == t):
-                    #print((i['dt_txt']), i['weather'][0]['description'], i['main']['temp'])
+                    print((i['dt_txt']), i['weather'][0]['description'], i['main']['temp'])
                     return i['main']['temp'], i['weather'][0]['description']
         except Exception as e:
             print("Exception (forecast):", e)
@@ -53,7 +55,7 @@ class WeatherScreen(Screen):
     def recomendation_from_db(self, temperature, description, ind):
         try:
             # пытаемся подключиться к базе данных
-            conn = psycopg2.connect(dbname='postgres', user='marininadarasergeevna', password='Barenu234', host='localhost',
+            conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
                                     port='5432', options='-c search_path=project_db')
             conn.autocommit = True
             cursor = conn.cursor(cursor_factory=NamedTupleCursor)
@@ -80,6 +82,7 @@ class WeatherScreen(Screen):
         city_id = self.get_city_id(s_city_name)
         mass_weather = []
         for i in range(1, 4):
+            #проёб: нельзя смотреть прогноз на сегодняшний день позже 09:00, так как погода смотрит только прогноз на будущее :)
             if i == 1:
                 mass = self.request_forecast(city_id, time=self.get_time(date), t="09:00")
                 recomendation = self.recomendation_from_db(temperature=mass[0], description=mass[1], ind=1)
@@ -205,7 +208,7 @@ class RouteScreen(Screen):
             <script type="text/javascript">
             ymaps.ready(function () {
                 var myMap = new ymaps.Map('map', {
-                    center: [55.753994, 37.622093],
+                    center: [59.938784, 30.314997],
                     zoom: 9,
                     controls: ['routePanelControl']
                 });
@@ -236,6 +239,37 @@ class RouteScreen(Screen):
 
     pass
 
+class HistoryScreen(Screen):
+
+    def submit(self): #вставляем напечатанный текст из word_input
+        # self.ids.word.text - обращение к полю text у обьекта экрана с индексом word
+        conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
+                                port='5432')
+        conn.autocommit = True
+        cursor = conn.cursor(cursor_factory=NamedTupleCursor)
+        cursor.execute("INSERT INTO names (имя) VALUES (%s)", (self.ids.word_input.text,))
+        self.ids.word_input.text = ''
+
+        cursor.close()  # закрываем курсор
+        conn.close()  # закрываем подключение
+
+    def show_records(self):
+        conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
+                                port='5432')
+        conn.autocommit = True
+        cursor = conn.cursor(cursor_factory=NamedTupleCursor)
+        cursor.execute("SELECT * FROM names")
+        records = cursor.fetchall()
+
+        word = ''
+
+        for record in records:
+            word = f'{word}\n{record[1]}'
+            self.ids.word_label.text = f'{word}'
+
+        cursor.close()  # закрываем курсор
+        conn.close()  # закрываем подключение
+    pass
 
 class RecomendScreen(Screen):
     pass
@@ -254,7 +288,7 @@ class MyApp(MDApp):
         sm.add_widget(MapScreen(name='map'))
         sm.add_widget(RecomendScreen(name='recomend'))
         sm.add_widget(RegisterScreen(name='register'))
-
+        sm.add_widget(HistoryScreen(name='history'))
         sm.theme_style = 'Dark' #меняем общую тему на Light
         sm.primary_palette = "Purple"
 
