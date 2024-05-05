@@ -1,0 +1,49 @@
+<HistoryScreen>:
+    history_text: history_text
+    table: table
+
+    MDButton:
+        style: "elevated"
+        size_hint: (0.15, 0.15)
+        pos_hint: {"center_x": .5, "center_y": .9}
+
+    MDExpansionPanel:
+        id: panel
+        pos_hint: {"center_x": .5, "center_y": .2}
+
+        MDExpansionPanelHeader:
+
+            MDListItem:
+                theme_bg_color: "Custom"
+                md_bg_color: self.theme_cls.surfaceContainerLowColor
+                ripple_effect: False
+
+                MDListItemSupportingText:
+                    text: "Supporting text"
+
+                TrailingPressedIconButton:
+                    id: chevron
+                    icon: "chevron-right"
+                    on_release: root.tap_expansion_chevron(panel, chevron)
+
+        MDExpansionPanelContent:
+            orientation: "vertical"
+            padding: "12dp", 0, "12dp", 0
+
+            MDLabel:
+                text: "Channel information"
+                adaptive_height: True
+                padding_x: "16dp"
+                padding_y: "12dp"
+
+            MDListItem:
+                id: table
+                MDListItemLeadingIcon:
+                    icon: "email"
+
+                MDListItemHeadlineText:
+                    id: history_text
+                    text: "none"
+
+                MDListItemSupportingText:
+                    text: "none"
