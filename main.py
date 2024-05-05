@@ -12,6 +12,10 @@ import requests
 
 import bcrypt
 
+from merged_kv import load_kv_files
+
+load_kv_files()
+
 conn = psycopg2.connect(dbname='postgres', user='iulia', password='postgres', host='localhost', port='5432', options='-c search_path=project_db')
 
 
@@ -20,9 +24,9 @@ class RegisterScreen(Screen):
     def registration(self):
 
         self.label.text = 'Sign up'
-        email = str(self.email.text)
-        password_1 = str(self.password_1.text)
-        password_2 = str(self.password_2.text)
+        email = self.email.text
+        password_1 = self.password_1.text
+        password_2 = self.password_2.text
 
         if password_1 == '' or password_2 == '':
             self.password_2.hint_text = 'no password'
@@ -37,58 +41,49 @@ class RegisterScreen(Screen):
         if existing_user is None:
 
             hashed_password = bcrypt.hashpw(password_1.encode('utf-8'), bcrypt.gensalt())
-            print(type(hashed_password))
             cur.execute("INSERT INTO users (email, password) VALUES(%s, %s)", (email, hashed_password))
             conn.commit()
-
-            cur.close()
-            self.my_function() 
-
+            app = MDApp.get_running_app()
+            app.root.current = "main"  
         else:
             self.label.text = 'this email already used'
 
         cur.close()
 
 
-    def my_function(self):
-        app = MDApp.get_running_app()
-        app.root.current = "main" 
-
-
 class MainScreen(Screen):
-    
-    def login(self):
-        self.label_log.text = 'Please login'
-        name = str(self.ids.name.text) #почему именно здесь не работает без ids а в остальных местах ок?
-        print(name)
-        password = str(self.password.text)
-        print(password)
-        
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s ", (name,))
-        existing_user = cur.fetchone()
+    try:
+        def login(self):
+            self.label_log.text = 'Please login'
+            name = self.ids.name.text #почему именно здесь не работает без ids а в остальных местах ок?
+            password = self.password.text
+            
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM users WHERE email = %s ", (name,))
+            existing_user = cur.fetchone()
 
-        if existing_user is None:
-            self.label_log.text = 'No user with that email'
-            cur.close()
-
-        else:
-            hashed_db_password = existing_user[1]
-            print(type(hashed_db_password))
-            print(type(password.encode('utf-8')))
-            if not bcrypt.checkpw(password.encode('utf-8'), hashed_db_password):
-                self.label_log.text = 'Password is incorrect'
-                cur.close()
+            if existing_user is None:
+                self.label_log.text = 'No user with that email'
 
             else:
-                cur.close()
-#                app = MDApp.get_running_app()
-#                app.root.current = "recomend" 
+                hashed_db_password = existing_user[1]
+                hashed_db_password = bytes(hashed_db_password) #так как изнач формат memoryview
 
-#        except:
-#            print('can\'t use users db')
+                if not bcrypt.checkpw(password.encode('utf-8'), hashed_db_password):
+                    self.label_log.text = 'Password is incorrect'
+
+                else:
+                    app = MDApp.get_running_app()
+                    app.root.current = "recomend" 
+            cur.close()
+
+    except:
+        print('can\'t use users db')
 
 
+class ChangePasswordScreen(Screen):
+    pass
+    
 
 class MapScreen(Screen):
     pass
@@ -316,12 +311,14 @@ class MyApp(MDApp):
         self.theme_cls.theme_style = 'Dark' #меняем общую тему на Light
         self.theme_cls.primary_palette = "Purple"
         sm = ScreenManager()
+        sm.add_widget(ChangePasswordScreen(name='changepw'))
         sm.add_widget(MainScreen(name='main'))  # экран со входом
         sm.add_widget(WeatherScreen(name='weather'))
         sm.add_widget(RouteScreen(name='route'))
         sm.add_widget(MapScreen(name='map'))
         sm.add_widget(RecomendScreen(name='recomend'))
         sm.add_widget(RegisterScreen(name='register'))
+#        sm.add_widget(ChangePasswordScreen(name='changepw'))
 
         sm.theme_style = 'Dark' #меняем общую тему на Light
         sm.primary_palette = "Purple"
