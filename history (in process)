@@ -1,0 +1,56 @@
+from kivy.lang import Builder
+from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.screenmanager import ScreenManager, Screen
+
+from kivymd.app import MDApp
+from kivymd.uix.behaviors import RotateBehavior
+from kivymd.uix.expansionpanel import MDExpansionPanel
+from kivymd.uix.list import MDListItemTrailingIcon
+from KivyMD.kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemHeadlineText, MDListItemSupportingText
+
+class TrailingPressedIconButton(
+    ButtonBehavior, RotateBehavior, MDListItemTrailingIcon
+):
+    ...
+
+
+class HistoryScreen(Screen):
+
+
+    def need_it(self):
+        table = MDListItem(
+            MDListItemLeadingIcon(icon="instagram"),
+            MDListItemHeadlineText(text="Instagram"),
+            MDListItemSupportingText(text="Account"),
+        )
+        self.ids.history_text.text = "Instagram"
+
+
+    def tap_expansion_chevron(
+        self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton
+    ):
+        panel.open() if not panel.is_open else panel.close()
+        panel.set_chevron_down(
+            chevron
+        ) if not panel.is_open else panel.set_chevron_up(chevron)
+        #self.ids.history_text.text = "pypypyp"
+
+    pass
+
+class dataApp(MDApp):
+    title = 'My app'
+
+    def on_start(self):
+        self.root.ids.history_text.text = "pypypyp"
+
+    def build(self):
+        sm = ScreenManager()
+        sm.add_widget(HistoryScreen(name='history'))
+        sm.theme_style = 'Dark' #меняем общую тему на Light
+        sm.primary_palette = "Purple"
+
+        return sm
+
+
+if __name__ == '__main__':
+    dataApp().run()
