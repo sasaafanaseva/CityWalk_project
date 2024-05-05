@@ -227,6 +227,52 @@
                 font_size: 30
                 text_color: "purple"
 
+        MDButton:
+            style: "elevated"
+            size_hint: (0.10, 0.10)
+            pos_hint: {"center_x": .5, "center_y": .25}
+            on_release: root.manager.current = 'history'
+
+            MDButtonText:
+                id: button_id
+                text: "история маршрутов"
+                font_size: 30
+
+<HistoryScreen>:
+    word_label: word_label
+    word_input: word_input
+
+    FloatLayout:
+        MDLabel:
+            id: word_label
+            text: "History"
+            font_size: 30
+            halign: "center"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+            text_color: "white"
+
+        TextInput:
+            id: word_input
+            multiline: False
+            size_hint: 0.3, 0.07
+            pos_hint: {'center_x': .5, 'center_y': .40}
+
+        Button:
+            size_hint: 0.3, 0.04
+            font_size: 32
+            text: "отправить имя"
+            pos_hint: {"center_x":.5,"center_y":.55}
+            on_release: root.submit()
+
+        Button:
+            size_hint: 0.3, 0.02
+            font_size: 32
+            text: "показать результаты"
+            pos_hint: {"center_x":.5,"center_y":.70}
+            on_release: root.show_records()
+
+
+
 <WeatherScreen>:
     MDTextField:
         id: field
