@@ -1,4 +1,8 @@
+import asynckivy
+from kivy.animation import Animation
 from kivy.lang import Builder
+from kivy.metrics import dp
+from kivy.properties import StringProperty
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.screenmanager import ScreenManager, Screen
 
@@ -6,25 +10,110 @@ from kivymd.app import MDApp
 from kivymd.uix.behaviors import RotateBehavior
 from kivymd.uix.expansionpanel import MDExpansionPanel
 from kivymd.uix.list import MDListItemTrailingIcon
-from KivyMD.kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemHeadlineText, MDListItemSupportingText
+
+from KivyMD.kivymd.uix.list import MDListItem
+
+KV = '''
+<MyListItem>
+
+    MDListItemLeadingIcon:
+        icon: "account"
+        padding_x: "1dp"
+        padding_y: "30dp"
+
+    MDListItemHeadlineText:
+        text: root.text
+
+    MDListItemSupportingText:
+
+    MDListItemTrailingCheckbox:
+        on_active: root.on_checkbox_active(*args)
+
+
+<ExpansionPanelItem>
+
+    MDExpansionPanelHeader:
+
+        MDListItem:
+
+            MDListItemSupportingText:
+                text: "Supporting text"
+                text_color: 1,0,0,0.5
+
+            TrailingPressedIconButton:
+                id: chevron
+                icon: "chevron-right"
+                icon_color: 1,0,0.5,1
+                on_release: app.tap_expansion_chevron(root, chevron)
+
+    MDExpansionPanelContent:
+        orientation: "vertical"
+        id: my_list
+        padding: "12dp", 0, "12dp", "12dp"
+        
+        MDLabel:
+            text_color: 1,0,0.5,1
+            text: "Channel information"
+            adaptive_height: True
+            padding_x: "6dp"
+            padding_y: "2dp"
+
+MDScreen:
+
+    ScrollView:
+        size_hint_x: .5
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+        MDList:
+            id: container
+'''
+
+class MyListItem(MDListItem):
+    text = StringProperty()
+
+    def on_checkbox_active(self, checkbox, value):
+        if value:
+            print("галочку нажали")
+        else:
+            print("галочку отжали")
+    pass
+
+class ExpansionPanelItem(MDExpansionPanel):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ids.my_list.add_widget(MyListItem(text="inst"))
+
 
 class TrailingPressedIconButton(
     ButtonBehavior, RotateBehavior, MDListItemTrailingIcon
 ):
     ...
 
-
 class HistoryScreen(Screen):
+    pass
 
+class Example(MDApp):
 
-    def need_it(self):
-        table = MDListItem(
-            MDListItemLeadingIcon(icon="instagram"),
-            MDListItemHeadlineText(text="Instagram"),
-            MDListItemSupportingText(text="Account"),
-        )
-        self.ids.history_text.text = "Instagram"
+    def build(self):
+        #sm = ScreenManager()
+        #sm.theme_style = 'Dark'  # меняем общую тему на Light
+        #sm.primary_palette = "Purple"
+        #sm.add_widget(HistoryScreen(name='history'))
+        self.theme_cls.theme_style = 'Dark'
+        self.theme_cls.primary_palette = "Purple"
 
+        async def set_panel_list():
+            for i in range(1):
+                await asynckivy.sleep(0)
+                #history_screen = sm.get_screen('history')
+                #history_screen.ids.my_list.add_widget(
+                    #MyListItem(text="inst")
+                #)
+                self.root.ids.container.add_widget(ExpansionPanelItem())
+
+        asynckivy.start(set_panel_list())
+
+        return Builder.load_string(KV)
 
     def tap_expansion_chevron(
         self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton
@@ -33,24 +122,6 @@ class HistoryScreen(Screen):
         panel.set_chevron_down(
             chevron
         ) if not panel.is_open else panel.set_chevron_up(chevron)
-        #self.ids.history_text.text = "pypypyp"
-
-    pass
-
-class dataApp(MDApp):
-    title = 'My app'
-
-    def on_start(self):
-        self.root.ids.history_text.text = "pypypyp"
-
-    def build(self):
-        sm = ScreenManager()
-        sm.add_widget(HistoryScreen(name='history'))
-        sm.theme_style = 'Dark' #меняем общую тему на Light
-        sm.primary_palette = "Purple"
-
-        return sm
 
 
-if __name__ == '__main__':
-    dataApp().run()
+Example().run()
