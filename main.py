@@ -9,6 +9,22 @@ import psycopg2
 from psycopg2.extras import NamedTupleCursor
 import requests
 from kivy.metrics import dp
+from kivy.lang import Builder
+from kivy.properties import StringProperty
+from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.screenmanager import ScreenManager
+from kivymd.theming import ThemeManager
+
+from kivymd.app import MDApp
+from kivymd.uix.behaviors import RotateBehavior
+from kivymd.uix.expansionpanel import MDExpansionPanel
+from kivymd.uix.list import MDListItemTrailingIcon
+import psycopg2
+from psycopg2.extras import NamedTupleCursor
+
+from KivyMD.kivymd.uix.list import MDListItem, MDListItemHeadlineText, MDListItemSupportingText
+from KivyMD.kivymd.uix.screen import MDScreen
+
 
 
 class RegisterScreen(Screen):
@@ -148,101 +164,152 @@ class WeatherScreen(Screen):
         date_dialog.open()
     pass
 
+def global_create_map_html(point_a, point_b):
+    html_content = '''
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Passing Python Variable to JavaScript</title>
+    </head>
+
+    <body>
+        <div id="map" style="width: 650px; height: 550px"></div>
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=50249262-df67-4c59-9a72-639cc6170daf&lang=ru_RU" type="text/javascript">
+        </script>
+        <script type="text/javascript">
+        ymaps.ready(function () {
+            var myMap = new ymaps.Map('map', {
+                center: [59.938784, 30.314997],
+                zoom: 9,
+                controls: ['routePanelControl']
+            });
+
+            // Получение ссылки на панель маршрутизации.
+            var control = myMap.controls.get('routePanelControl');
+
+            // Задание состояния для панели маршрутизации.
+            control.routePanel.state.set({
+                from: %s,
+                to: %s
+            });
+        });
+    </script>
+    </body>
+    </html>
+    ''' % (point_a, point_b)
+
+    # Запись HTML в файл
+    with open("map.html", "w") as file:
+        file.write(html_content)
+
+def global_get_points(point_a, point_b):
+    url = 'https://search-maps.yandex.ru/v1/?&type=biz&lang=ru_RU&apikey=91165e16-5d01-4ca1-8a5d-49779363a0f8'
+    try:
+        params = {'text': 'Санкт-Петербург' + point_a}
+        response = requests.get(url, params=params)
+
+        if response.status_code == 200:
+            data = response.json()
+            point_a = data["features"][0]["geometry"]["coordinates"]
+        else:
+            print('Ошибка при получении данных:', response.status_code)
+
+        params = {'text': 'Санкт-Петербург' + point_b}
+        response = requests.get(url, params=params)
+
+        if response.status_code == 200:
+            data = response.json()
+            point_b = data["features"][0]["geometry"]["coordinates"]
+        else:
+            print('Ошибка при получении данных:', response.status_code)
+
+        first = point_a[0]
+        point_a[0] = point_a[1]
+        point_a[1] = first
+
+        second = point_b[0]
+        point_b[0] = point_b[1]
+        point_b[1] = second
+
+        return point_a, point_b
+
+    except:
+        print("ошибка")
+
+
 class RouteScreen(Screen):
 
+    def submit(self): #вставляем напечатанный текст из word_input
+        # self.ids.word.text - обращение к полю text у обьекта экрана с индексом word
+        conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
+                                port='5432')
+        conn.autocommit = True
+        cursor = conn.cursor(cursor_factory=NamedTupleCursor)
+        cursor.execute("INSERT INTO names (имя) VALUES (%s)", (self.ids.word_input.text,))
+        self.ids.word_input.text = ''
+
+        cursor.close()  # закрываем курсор
+        conn.close()  # закрываем подключение
+
+    def save_route(self):
+        conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
+                                port='5432', options='-c search_path=project_db')
+        conn.autocommit = True
+        cursor = conn.cursor(cursor_factory=NamedTupleCursor)
+        cursor.execute("INSERT INTO history (откуда, куда)VALUES (%s, %s)", (self.ids.text_input_a_id.text,self.ids.text_input_b_id.text,))
+
+        cursor.close()  # закрываем курсор
+        conn.close()  # закрываем подключение
+
     def get_points(self):
-
-        url = 'https://search-maps.yandex.ru/v1/?&type=biz&lang=ru_RU&apikey=91165e16-5d01-4ca1-8a5d-49779363a0f8'
-        point_a = [0,0]
-        point_b = [0,0]
-        try:
-            params = {'text': 'Санкт-Петербург' + self.ids.text_input_a_id.text}
-            response = requests.get(url, params=params)
-
-            if response.status_code == 200:
-                data = response.json()
-                point_a = data["features"][0]["geometry"]["coordinates"]
-            else:
-                print('Ошибка при получении данных:', response.status_code)
-
-            params = {'text': 'Санкт-Петербург' + self.ids.text_input_b_id.text}
-            response = requests.get(url, params=params)
-
-            if response.status_code == 200:
-                data = response.json()
-                point_b = data["features"][0]["geometry"]["coordinates"]
-            else:
-                print('Ошибка при получении данных:', response.status_code)
-
-            first = point_a[0]
-            point_a[0] = point_a[1]
-            point_a[1] = first
-
-            second = point_b[0]
-            point_b[0] = point_b[1]
-            point_b[1] = second
-
-            return point_a, point_b
-
-        except:
-            print("ошибка")
-
+        return global_get_points(self.ids.text_input_a_id.text, self.ids.text_input_b_id.text)
 
     def create_map(self):
         points = self.get_points()
         point_a = points[0]
         point_b = points[1]
-
-        html_content = '''
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title>Passing Python Variable to JavaScript</title>
-        </head>
-
-        <body>
-            <div id="map" style="width: 650px; height: 550px"></div>
-            <script src="https://api-maps.yandex.ru/2.1/?apikey=50249262-df67-4c59-9a72-639cc6170daf&lang=ru_RU" type="text/javascript">
-            </script>
-            <script type="text/javascript">
-            ymaps.ready(function () {
-                var myMap = new ymaps.Map('map', {
-                    center: [59.938784, 30.314997],
-                    zoom: 9,
-                    controls: ['routePanelControl']
-                });
-
-                // Получение ссылки на панель маршрутизации.
-                var control = myMap.controls.get('routePanelControl');
-
-                // Задание состояния для панели маршрутизации.
-                control.routePanel.state.set({
-                    from: %s,
-                    to: %s
-                });
-            });
-        </script>
-        </body>
-        </html>
-        ''' % (point_a, point_b)
-
-        # Запись HTML в файл
-        with open("map.html", "w") as file:
-            file.write(html_content)
+        global_create_map_html(point_a, point_b)
+        self.save_route()
 
     def Push(self):
         self.create_map()
         webview.create_window('map', 'map.html', width=700, height=600)
         webview.start()
-        self.ids.button_id.text = "Was created"
+        self.ids.button._button_text.text = "Was created"
 
     pass
 
+class TrailingPressedIconButton(
+    ButtonBehavior, RotateBehavior, MDListItemTrailingIcon
+):
+    ...
+
+class MyListItem(MDListItem):
+    text = StringProperty()
+
+    def on_checkbox_active(self, checkbox, value):
+        if value:
+            points = self.text
+            point_a = points.split(" --> ")[0]
+            point_b = points.split(" --> ")[1]
+            print(point_a, point_b)
+            points = global_get_points(point_a, point_b)
+            point_a = points[0]
+            point_b = points[1]
+
+            global_create_map_html(point_a, point_b)
+            webview.create_window('map', 'map.html', width=700, height=600)
+            webview.start()
+
+        else:
+            print("галочку отжали")
+    pass
+
+
 class HistoryScreen(Screen):
 
-    def submit(self): #вставляем напечатанный текст из word_input
-        # self.ids.word.text - обращение к полю text у обьекта экрана с индексом word
+    def submit(self):
         conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
                                 port='5432')
         conn.autocommit = True
@@ -279,9 +346,9 @@ class MyApp(MDApp):
 
     def build(self):
         #  theme_cls = ThemeManager()
-        self.theme_cls.theme_style = 'Dark' #меняем общую тему на Light
-        self.theme_cls.primary_palette = "Purple"
         sm = ScreenManager()
+        sm.theme_style = 'Dark' #меняем общую тему на Light
+        sm.primary_palette = "Purple"
         sm.add_widget(MainScreen(name='main'))  # экран со входом
         sm.add_widget(WeatherScreen(name='weather'))
         sm.add_widget(RouteScreen(name='route'))
@@ -289,10 +356,32 @@ class MyApp(MDApp):
         sm.add_widget(RecomendScreen(name='recomend'))
         sm.add_widget(RegisterScreen(name='register'))
         sm.add_widget(HistoryScreen(name='history'))
-        sm.theme_style = 'Dark' #меняем общую тему на Light
-        sm.primary_palette = "Purple"
+
+        conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
+                                port='5432', options='-c search_path=project_db')
+        conn.autocommit = True
+        cursor = conn.cursor(cursor_factory=NamedTupleCursor)
+        cursor.execute('SELECT откуда, куда FROM history')
+        mass = cursor.fetchall()
+
+        for i in mass:
+            my_text = i[0] + " --> " + i[1]
+            history_screen = sm.get_screen('history')
+            history_screen.ids.my_list.add_widget(
+                MyListItem(text=my_text)
+            )
+        cursor.close()  # закрываем курсор
+        conn.close()  # закрываем подключение
 
         return sm
+
+    def tap_expansion_chevron(
+            self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton
+    ):
+        panel.open() if not panel.is_open else panel.close()
+        panel.set_chevron_down(
+            chevron
+        ) if not panel.is_open else panel.set_chevron_up(chevron)
 
 
 if __name__ == '__main__':
