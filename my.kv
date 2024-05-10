@@ -214,6 +214,7 @@
 
 
         MDButton:
+            id: button
             style: "elevated"
             size_hint: (0.15, 0.15)
             pos_hint: {"center_x": .5, "center_y": .35}
@@ -238,38 +239,56 @@
                 text: "история маршрутов"
                 font_size: 30
 
+<MyListItem>
+
+    MDListItemLeadingIcon:
+        icon: "account"
+        padding_x: "1dp"
+        padding_y: "30dp"
+
+    MDListItemHeadlineText:
+        text: root.text
+
+    MDListItemSupportingText:
+
+    MDListItemTrailingCheckbox:
+        on_active: root.on_checkbox_active(*args)
+
+
 <HistoryScreen>:
-    word_label: word_label
-    word_input: word_input
 
-    FloatLayout:
-        MDLabel:
-            id: word_label
-            text: "History"
-            font_size: 30
-            halign: "center"
-            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
-            text_color: "white"
+    MDExpansionPanel:
+        id: panel
+        pos_hint: {"center_x": .5, "center_y": .5}
 
-        TextInput:
-            id: word_input
-            multiline: False
-            size_hint: 0.3, 0.07
-            pos_hint: {'center_x': .5, 'center_y': .40}
+        MDExpansionPanelHeader:
 
-        Button:
-            size_hint: 0.3, 0.04
-            font_size: 32
-            text: "отправить имя"
-            pos_hint: {"center_x":.5,"center_y":.55}
-            on_release: root.submit()
+            MDListItem:
 
-        Button:
-            size_hint: 0.3, 0.02
-            font_size: 32
-            text: "показать результаты"
-            pos_hint: {"center_x":.5,"center_y":.70}
-            on_release: root.show_records()
+                MDListItemSupportingText:
+                    text: "Supporting text"
+                    pos_hint: {"center_x": .4, "center_y": .70}
+
+                TrailingPressedIconButton:
+                    id: chevron
+                    icon: "chevron-right"
+                    on_release: app.tap_expansion_chevron(panel, chevron)
+
+        MDExpansionPanelContent:
+            orientation: 'vertical'
+            adaptive_height: True
+            id: my_list
+            padding: "1dp", 0, "10dp", 0
+
+            MDLabel:
+                text: "Channel information"
+                adaptive_height: True
+                padding_x: "6dp"
+                padding_y: "6dp"
+
+
+
+
 
 
 
@@ -309,4 +328,3 @@
             on_release: root.manager.current = 'recomend'
             MDNavigationItemIcon:
                 icon: "star-four-points"
-
