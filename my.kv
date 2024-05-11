@@ -1,3 +1,49 @@
+
+<MainScreen>:
+    name: name
+    password: password
+    label_log: label
+
+    MDLabel:
+        id: label
+        text: 'Please login'
+        pos_hint:{"center_x":.5,"center_y":.75}
+        halign:"center"
+        text_color: "white"
+        font_style:"Title"
+
+    TextInput:
+        id: name
+        hint_text: 'enter your email'
+        multiline: False
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .60}
+
+
+    TextInput:
+        id: password
+        hint_text: 'enter password'
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        multiline: False
+        password: True
+
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .5, 'center_y': .39}
+        on_release: root.manager.current = 'weather'
+        MDButtonText:
+            text:"  login  "
+
+
+    MDButton:
+        pos_hint: {'center_x': .5, 'center_y': .3}
+        halign: "center"
+        on_release: root.manager.current = 'register'
+        MDButtonText:
+            text:"register"
+
 <RegisterScreen>
     email: email
     label: label
@@ -9,7 +55,7 @@
         text: 'Sign up'
         pos_hint:{"center_x":.5,"center_y":.75}
         halign:"center"
-        text_color: "pink"
+        text_color: "white"
         font_style:"Title"
 
     TextInput:
@@ -46,50 +92,49 @@
             text:"  Register  "
 
 
-<MainScreen>:
-    name: name
-    password: password
-    label_log: label
+    MDButton:
+        pos_hint: {'center_x': .5, 'center_y': .2}
+        halign: "center"
+        on_release: root.manager.current = 'main'
+        MDButtonText:
+            text:"back to login"
+
+<ChangePasswordScreen>
+    email: email
+    label: label
 
     MDLabel:
         id: label
-        text: 'Please login'
+        text: 'Пожалуйста, напишите Вашу почту'
         pos_hint:{"center_x":.5,"center_y":.75}
         halign:"center"
         text_color: "pink"
         font_style:"Title"
 
+
     TextInput:
-        id: name
-        hint_text: 'enter your email'
+        id: email
+        hint_text: 'введите почту'
         multiline: False
         size_hint: 0.3, 0.07
         pos_hint: {'center_x': .5, 'center_y': .60}
 
 
-    TextInput:
-        id: password
-        hint_text: 'enter password'
-        size_hint: 0.3, 0.07
-        pos_hint: {'center_x': .5, 'center_y': .5}
-        multiline: False
-        password: True
-
-
     MDButton:
         halign: "center"
-        pos_hint: {'center_x': .5, 'center_y': .39}
-        on_release: root.manager.current = 'weather'
-        MDButtonText:
-            text:"  login  "
-
-
-    MDButton:
         pos_hint: {'center_x': .5, 'center_y': .3}
-        halign: "center"
-        on_release: root.manager.current = 'register'
+        on_release: root.send_email()
         MDButtonText:
-            text:"register"
+            text:"  Прислать код  "
+
+
+    MDButton:
+        pos_hint: {'center_x': .5, 'center_y': .2}
+        halign: "center"
+        on_release: root.manager.current = 'main'
+        MDButtonText:
+            text:"Вернуться"
+
 
 <RecomendScreen>:
 
@@ -148,6 +193,7 @@
 
     MDNavigationBar:
         size_hint: 1, 0.07
+
         MDNavigationItem:
             on_release: root.manager.current = 'weather'
             MDNavigationItemIcon:
@@ -214,6 +260,7 @@
 
 
         MDButton:
+            id: button
             style: "elevated"
             size_hint: (0.15, 0.15)
             pos_hint: {"center_x": .5, "center_y": .35}
@@ -227,7 +274,74 @@
                 font_size: 30
                 text_color: "purple"
 
+        MDButton:
+            style: "elevated"
+            size_hint: (0.10, 0.10)
+            pos_hint: {"center_x": .5, "center_y": .25}
+            on_release: root.manager.current = 'history'
+
+            MDButtonText:
+                id: button_id
+                text: "история маршрутов"
+                font_size: 30
+
+<MyListItem>
+
+    MDListItemLeadingIcon:
+        icon: "map-marker"
+
+    MDListItemHeadlineText:
+        adaptive_size: True
+        text: root.text
+
+    MDListItemTrailingCheckbox:
+        on_active: root.on_checkbox_active(*args)
+
+
+
+<ExpansionPanelItem>
+
+    MDExpansionPanelHeader:
+
+        MDListItem:
+
+            MDListItemSupportingText:
+                text: "Выбрать маршрут"
+
+            TrailingPressedIconButton:
+                id: chevron
+                icon: "chevron-right"
+                on_release: app.tap_expansion_chevron(root, chevron)
+
+    MDExpansionPanelContent:
+        orientation: "vertical"
+        id: my_list
+        padding: "4dp", 0, "4dp", "4dp"
+
+        MDLabel:
+            text: "Информация о маршруте"
+            text_color: "white"
+            adaptive_height: True
+            padding_x: "6dp"
+            padding_y: "2dp"
+
+<HistoryScreen>:
+    MDIconButton:
+        icon: "chevron-left"
+        style: "standard"
+        pos_hint: {"center_x": 0.05, "center_y": .1}
+        on_release: root.change_screen()
+
+    ScrollView:
+        size_hint_x: .8
+        pos_hint: {"center_x": .5, "center_y": .5}
+        MDList:
+            id: my_container
+
+
+
 <WeatherScreen>:
+
     MDTextField:
         id: field
         mode: "outlined"
@@ -263,4 +377,3 @@
             on_release: root.manager.current = 'recomend'
             MDNavigationItemIcon:
                 icon: "star-four-points"
-
