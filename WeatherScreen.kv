@@ -1,0 +1,37 @@
+<WeatherScreen>:
+    MDTextField:
+        id: field
+        mode: "outlined"
+        pos_hint: {'center_x': .5, 'center_y': .85}
+        size_hint_x: .5
+        on_focus: root.show_date_picker(self.focus)
+
+        MDTextFieldHintText:
+            text: "Docked date picker"
+
+        MDTextFieldHelperText:
+            text: "MM/DD/YYYY"
+            mode: "persistent"
+
+        MDTextFieldTrailingIcon:
+            icon: "calendar"
+
+
+
+    MDNavigationBar:
+        size_hint: 1, 0.07
+        MDNavigationItem:
+            on_release: root.manager.current = 'weather'
+            MDNavigationItemIcon:
+                icon: "weather-partly-cloudy"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'route'
+            MDNavigationItemIcon:
+                icon: "map-search-outline"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'recomend'
+            MDNavigationItemIcon:
+                icon: "star-four-points"
+

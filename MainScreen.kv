@@ -1,0 +1,45 @@
+
+<MainScreen>:
+    name: name
+    password: password
+    label_log: label
+
+    MDLabel:
+        id: label
+        text: 'Please login'
+        pos_hint:{"center_x":.5,"center_y":.75}
+        halign:"center"
+        text_color: "pink"
+        font_style:"Title"
+        
+    TextInput:
+        id: name
+        hint_text: 'enter your email'
+        multiline: False
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .60}
+
+
+    TextInput:
+        id: password
+        hint_text: 'enter password'
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        multiline: False
+        password: True
+
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .5, 'center_y': .39}
+        on_release: root.login()
+        MDButtonText: 
+            text:"  login  "
+
+
+    MDButton:
+        pos_hint: {'center_x': .5, 'center_y': .3}
+        halign: "center"
+        on_release: root.manager.current = 'register'
+        MDButtonText: 
+            text:"register"

@@ -1,0 +1,54 @@
+<RegisterScreen>
+    email: email
+    label: label
+    password_1: password_first
+    password_2: password_second
+
+    MDLabel:
+        id: label
+        text: 'Sign up'
+        pos_hint:{"center_x":.5,"center_y":.75}
+        halign:"center"
+        text_color: "pink"
+        font_style:"Title"
+        
+    TextInput:
+        id: email
+        hint_text: 'enter your email'
+        multiline: False
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .60}
+
+
+    TextInput:
+        id: password_first
+        hint_text: 'password'
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        multiline: False
+        password: True
+        
+    
+    TextInput:
+        id: password_second
+        hint_text: 'repeat password'
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .4}
+        multiline: False
+        password: True
+
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .5, 'center_y': .3}
+        on_release: root.registration()
+        MDButtonText: 
+            text:"  Register  "
+
+
+    MDButton:
+        pos_hint: {'center_x': .5, 'center_y': .2}
+        halign: "center"
+        on_release: root.manager.current = 'main'
+        MDButtonText: 
+            text:"back to login"

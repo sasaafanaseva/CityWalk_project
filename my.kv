@@ -1,0 +1,266 @@
+<RegisterScreen>
+    email: email
+    label: label
+    password_1: password_first
+    password_2: password_second
+
+    MDLabel:
+        id: label
+        text: 'Sign up'
+        pos_hint:{"center_x":.5,"center_y":.75}
+        halign:"center"
+        text_color: "pink"
+        font_style:"Title"
+
+    TextInput:
+        id: email
+        hint_text: 'enter your email'
+        multiline: False
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .60}
+
+
+    TextInput:
+        id: password_first
+        hint_text: 'password'
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        multiline: False
+        password: True
+
+
+    TextInput:
+        id: password_second
+        hint_text: 'repeat password'
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .4}
+        multiline: False
+        password: True
+
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .5, 'center_y': .3}
+        on_release: root.registration()
+        MDButtonText:
+            text:"  Register  "
+
+
+<MainScreen>:
+    name: name
+    password: password
+    label_log: label
+
+    MDLabel:
+        id: label
+        text: 'Please login'
+        pos_hint:{"center_x":.5,"center_y":.75}
+        halign:"center"
+        text_color: "pink"
+        font_style:"Title"
+
+    TextInput:
+        id: name
+        hint_text: 'enter your email'
+        multiline: False
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .60}
+
+
+    TextInput:
+        id: password
+        hint_text: 'enter password'
+        size_hint: 0.3, 0.07
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        multiline: False
+        password: True
+
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .5, 'center_y': .39}
+        on_release: root.manager.current = 'weather'
+        MDButtonText:
+            text:"  login  "
+
+
+    MDButton:
+        pos_hint: {'center_x': .5, 'center_y': .3}
+        halign: "center"
+        on_release: root.manager.current = 'register'
+        MDButtonText:
+            text:"register"
+
+<RecomendScreen>:
+
+    recomendation_1: recomendation_1
+    recomendation_2: recomendation_2
+
+
+    MDLabel:
+        text:"Recomendations"
+        pos_hint:{"center_x":.5,"center_y":.95}
+        halign:"center"
+        text_color: "pink"
+        font_style:"Title"
+        role: "medium"
+
+    MDIcon:
+        icon: "map-marker"
+        pos_hint:{"center_x":.15,"center_y":.8}
+        icon_color: 'white'
+
+
+    MDIcon:
+        icon: "map-marker"
+        pos_hint:{"center_x":.15,"center_y":.7}
+        icon_color: 'white'
+
+
+    MDLabel:
+        id: recomendation_1
+        text:"Peterhof"
+        pos_hint:{"center_x":.7,"center_y":.8}
+        halign:"left"
+        text_color: "white"
+        font_style:"Title"
+
+
+    MDLabel:
+        id: recomendation_2
+        text:"Nevsky Prospekt"
+        pos_hint:{"center_x":.7,"center_y":.7}
+        halign:"left"
+        text_color: "white"
+        font_style:"Title"
+
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+        on_release: root.get_recomendations()
+        MDButtonIcon:
+            icon:"restore"
+        MDButtonText:
+            text:""
+
+
+
+    MDNavigationBar:
+        size_hint: 1, 0.07
+        MDNavigationItem:
+            on_release: root.manager.current = 'weather'
+            MDNavigationItemIcon:
+                icon: "weather-partly-cloudy"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'route'
+            MDNavigationItemIcon:
+                icon: "map-search-outline"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'recomend'
+            MDNavigationItemIcon:
+                icon: "star-four-points"
+
+
+<RouteScreen>:
+
+    MDNavigationBar:
+        size_hint: 1, 0.07
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'weather'
+            MDNavigationItemIcon:
+                icon: "weather-partly-cloudy"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'route'
+            MDNavigationItemIcon:
+                icon: "map-search-outline"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'recomend'
+            MDNavigationItemIcon:
+                icon: "star-four-points"
+
+    FloatLayout:
+        orientation: 'vertical'
+
+        MDLabel:
+            id: label_id
+            text: "CityWalk"
+            font_size: 30
+            halign: "center"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+            text_color: "white"
+
+
+        MDTextField:
+            id: text_input_a_id
+            multiline: False
+            font_size: 30
+            size_hint_x: 0.3
+            pos_hint: {'center_x': 0.5, 'top': 0.7}
+            hint_text: 'откуда'
+
+        MDTextField:
+            id: text_input_b_id
+            multiline: False
+            font_size: 30
+            size_hint_x: .3
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            hint_text: 'куда'
+
+
+        MDButton:
+            style: "elevated"
+            size_hint: (0.15, 0.15)
+            pos_hint: {"center_x": .5, "center_y": .35}
+            on_release: root.Push()
+
+            MDButtonIcon:
+                icon: "android"
+            MDButtonText:
+                id: button_id
+                text: "Create"
+                font_size: 30
+                text_color: "purple"
+
+<WeatherScreen>:
+    MDTextField:
+        id: field
+        mode: "outlined"
+        pos_hint: {'center_x': .5, 'center_y': .85}
+        size_hint_x: .5
+        on_focus: root.show_date_picker(self.focus)
+
+        MDTextFieldHintText:
+            text: "Docked date picker"
+
+        MDTextFieldHelperText:
+            text: "MM/DD/YYYY"
+            mode: "persistent"
+
+        MDTextFieldTrailingIcon:
+            icon: "calendar"
+
+
+
+    MDNavigationBar:
+        size_hint: 1, 0.07
+        MDNavigationItem:
+            on_release: root.manager.current = 'weather'
+            MDNavigationItemIcon:
+                icon: "weather-partly-cloudy"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'route'
+            MDNavigationItemIcon:
+                icon: "map-search-outline"
+
+        MDNavigationItem:
+            on_release: root.manager.current = 'recomend'
+            MDNavigationItemIcon:
+                icon: "star-four-points"
+
