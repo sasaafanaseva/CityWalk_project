@@ -19,15 +19,21 @@ CREATE TABLE history (
 
 );
 
-
 INSERT INTO history (откуда, куда, кто) VALUES ('НИУ ВШЭ', 'Кафе 8:am', 'sasa@gmail.com');
-INSERT INTO history (откуда, куда, кто) VALUES ('Вязовая 10', 'Золотое яблоко', 'julia@gmail.com');
+INSERT INTO history (откуда, куда, кто) VALUES ('Вязовая 10', 'Золотое яблоко', 'sasa@gmail.com');
 
 
 CREATE TABLE users (
     email TEXT PRIMARY KEY,
     password BYTEA/*(если хранить в тексте то немного при переводе в байты меняется строка пароля(переводить в байты нужно для bcript))*/
 );
+
+CREATE TABLE recomendations(
+    first TEXT,
+    second TEXT
+);
+
+INSERT INTO recomendations (first, second) VALUES ('Hermitage', 'The Gulf of Finland');
 
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'пасмурно', 'Утром будет прохладно, рекомендуем надеть теплую кофту или свитер.', 1);
@@ -501,4 +507,3 @@ INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (15, '�
 
 
 SELECT * FROM weather_recommend;
-
