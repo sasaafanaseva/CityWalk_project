@@ -17,12 +17,8 @@ from kivymd.uix.list import MDListItemTrailingIcon
 from KivyMD.kivymd.uix.list import MDListItem
 import bcrypt
 
-from merged_kv import load_kv_files
-
-load_kv_files()
-
 conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost', port='5432', options='-c search_path=project_db')
-
+user_email = ''
 
 class RegisterScreen(Screen):
 
@@ -62,6 +58,8 @@ class MainScreen(Screen):
             self.label_log.text = 'Please login'
             name = self.ids.name.text  # почему именно здесь не работает без ids а в остальных местах ок?
             password = self.password.text
+            global user_email
+            user_email = name
 
             cur = conn.cursor()
             cur.execute("SELECT * FROM users WHERE email = %s ", (name,))
@@ -79,7 +77,7 @@ class MainScreen(Screen):
 
                 else:
                     app = MDApp.get_running_app()
-                    app.root.current = "recomend"
+                    app.root.current = "weather"
             cur.close()
 
     except:
@@ -303,7 +301,8 @@ class RouteScreen(Screen):
                                 port='5432', options='-c search_path=project_db')
         conn.autocommit = True
         cursor = conn.cursor(cursor_factory=NamedTupleCursor)
-        cursor.execute("INSERT INTO history (откуда, куда)VALUES (%s, %s)", (self.ids.text_input_a_id.text,self.ids.text_input_b_id.text,))
+        global user_email
+        cursor.execute("INSERT INTO history (откуда, куда, кто)VALUES (%s, %s, %s)", (self.ids.text_input_a_id.text,self.ids.text_input_b_id.text, user_email))
 
         cursor.close()  # закрываем курсор
         conn.close()  # закрываем подключение
@@ -362,9 +361,9 @@ class ExpansionPanelItem(MDExpansionPanel):
         cursor.execute('SELECT откуда, куда, кто FROM history')
         mass = cursor.fetchall()
         for i in mass:
-            #if i[2] == email:
-            my_text = i[0] + " --> " + i[1]
-            self.ids.my_list.add_widget(MyListItem(text=my_text))
+            if i[2] == 'sasa@gmail.com':
+                my_text = i[0] + " --> " + i[1]
+                self.ids.my_list.add_widget(MyListItem(text=my_text))
         cursor.close()  # закрываем курсор
         conn.close()  # закрываем подключение
 
@@ -376,9 +375,22 @@ class HistoryScreen(Screen):
         self.manager.current = 'route'
     pass
 
-class RecomendScreen(Screen):
-    pass
 
+class RecomendScreen(Screen):
+
+    def get_recomendations(self):
+        try:
+
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM recomendations")
+            cursor = cur.fetchall()
+
+            self.recomendation_1.text = cursor[0][0]
+            self.recomendation_2.text = cursor[0][1]
+            cur.close()
+
+        except:
+            print('can\'t use rec db')
 class MyApp(MDApp):
     title = 'My app'
 
