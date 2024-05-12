@@ -26,7 +26,7 @@ INSERT INTO history (откуда, куда, кто) VALUES ('Вязовая 10'
 
 CREATE TABLE users (
     email TEXT PRIMARY KEY,
-    password TEXT
+    password BYTEA/*(если хранить в тексте то немного при переводе в байты меняется строка пароля(переводить в байты нужно для bcript))*/
 );
 
 
