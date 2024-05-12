@@ -16,4 +16,4 @@ python -m pip install "kivy[base]" kivy_examples
 
 
 Помимо этого импортируются  webview-android==0.10, requests, bcrypt, asynckivy \
-Также обязательно подключиться к базе и создать таблицу weather_recommend.
+Также обязательно подключиться к базе, создать и заполнить все таблицы перед запуском приложения
