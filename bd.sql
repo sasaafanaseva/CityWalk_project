@@ -2,6 +2,7 @@ create schema project_db;
 
 set search_path = project_db, public;
 
+
 CREATE TABLE weather_recommend (
     id SERIAL PRIMARY KEY,
     temp INTEGER,
@@ -10,11 +11,29 @@ CREATE TABLE weather_recommend (
     ind INTEGER
 );
 
+CREATE TABLE history (
+    id SERIAL PRIMARY KEY,
+    откуда TEXT,
+    куда TEXT,
+    кто TEXT
+
+);
+
+INSERT INTO history (откуда, куда, кто) VALUES ('НИУ ВШЭ', 'Кафе 8:am', 'sasa@gmail.com');
+INSERT INTO history (откуда, куда, кто) VALUES ('Вязовая 10', 'Золотое яблоко', 'sasa@gmail.com');
+
 
 CREATE TABLE users (
     email TEXT PRIMARY KEY,
-    password TEXT
+    password BYTEA/*(если хранить в тексте то немного при переводе в байты меняется строка пароля(переводить в байты нужно для bcript))*/
 );
+
+CREATE TABLE recomendations(
+    first TEXT,
+    second TEXT
+);
+
+INSERT INTO recomendations (first, second) VALUES ('Hermitage', 'The Gulf of Finland');
 
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'пасмурно', 'Утром будет прохладно, рекомендуем надеть теплую кофту или свитер.', 1);
@@ -27,6 +46,7 @@ INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'п
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'небольшая облачность', 'С утра будет хорошая погода для прогулки, но ещё достаточно прохладно, укутайтесь потеплее.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'снег', 'С утра на улице ожидается снег, поэтому рекомендуется надеть теплую куртку, тёплые рукавицы, шарф и шапку.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (0, 'дождь', 'С утра на улице собирается дождь, не забудьте зонт и непромокаемую обувь.', 1);
+
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (1, 'пасмурно', 'Утром на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (1, 'небольшой снег', 'Утром на улице мокрый снег, рекомендуем надеть тёплый свитер и непромокаемую обувь.', 1);
@@ -63,29 +83,29 @@ INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (3, 'д
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'пасмурно', 'Утром на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой снегопад', 'Утром будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 1);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'прохладно и сыро', 'С утра будет противная погода, обязательно выберите подходящую одежду и обувь.', 1);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой дождь', 'С утра будет противная погода, обязательно выберите подходящую одежду и обувь.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой туман', 'Утром возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'солнечно', 'С утра будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 1);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'пасмурно с прояснениями', 'Утром, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 1);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'облачно с прояснениями', 'Утром, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'переменная облачность', 'С утра будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'прохладно и ветрено', 'С утра будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'дождь', 'С утра на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 1);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'пасмурно', 'Утром на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой снегопад', 'Утром будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 1);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'прохладно и сыро', 'С утра будет противная погода, обязательно выберите подходящую одежду и обувь.', 1);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой дождь', 'С утра будет противная погода, обязательно выберите подходящую одежду и обувь.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой туман', 'Утром возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'солнечно', 'С утра будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 1);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'пасмурно с прояснениями', 'Утром, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 1);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'облачно с прояснениями', 'Утром, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'переменная облачность', 'С утра будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'прохладно и ветрено', 'С утра будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'дождь', 'С утра на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 1);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'пасмурно', 'Утром на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 1);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'прохладно и сыро', 'С утра будет противная погода, обязательно выберите подходящую одежду и обувь.', 1);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой дождь', 'С утра будет противная погода, обязательно выберите подходящую одежду и обувь.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой туман', 'Утром возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'солнечно', 'С утра будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте взять с собой платок', 1);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'пасмурно с прояснениями', 'Утром, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 1);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'облачно с прояснениями', 'Утром, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'переменная облачность', 'С утра будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'прохладно и ветрено', 'С утра будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 1);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'дождь', 'С утра на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 1);
@@ -218,30 +238,30 @@ INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (3, 'д
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'пасмурно', 'Днем на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой снегопад', 'Днем будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 2);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'прохладно и сыро', 'Днем будет противная погода, обязательно выберите подходящую одежду и обувь.', 2);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой дождь', 'Днем будет противная погода, обязательно выберите подходящую одежду и обувь.', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой туман', 'Днем возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'солнечно', 'Днем будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 2);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'пасмурно с прояснениями', 'Днем возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 2);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'облачно с прояснениями', 'Днем возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'переменная облачность', 'Днем будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'прохладно и ветрено', 'Днем будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'дождь', 'Днем на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 2);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'пасмурно', 'Днем на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой снегопад', 'Днем будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 2);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'прохладно и сыро', 'Днем будет противная погода, обязательно выберите подходящую одежду и обувь.', 2);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой дождь', 'Днем будет противная погода, обязательно выберите подходящую одежду и обувь.', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой туман', 'Днем возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'солнечно', 'Днем будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 2);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'пасмурно с прояснениями', 'Днем, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 2);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'облачно с прояснениями', 'Днем, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'переменная облачность', 'Днем будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'прохладно и ветрено', 'Днем будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'дождь', 'Днем на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 2);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'пасмурно', 'Днем на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой снегопад', 'Днем будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 2);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'прохладно и сыро', 'Днем будет противная погода, обязательно выберите подходящую одежду и обувь.', 2);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой дождь', 'Днем будет противная погода, обязательно выберите подходящую одежду и обувь.', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой туман', 'Днем возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'солнечно', 'Днем будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 2);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'пасмурно с прояснениями', 'Днем, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 2);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'облачно с прояснениями', 'Днем, возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'переменная облачность', 'Днем будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'прохладно и ветрено', 'Днем будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 2);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'дождь', 'Днем на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 2);
@@ -373,60 +393,60 @@ INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (3, 'д
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'пасмурно', 'Вечером на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой снегопад', 'Вечером будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'прохладно и сыро', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой дождь', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'небольшой туман', 'Вечером  возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'солнечно', 'Вечером  будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'пасмурно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'облачно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'переменная облачность', 'Вечером будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'прохладно и ветрено', 'Вечером  будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (4, 'дождь', 'Вечером на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 3);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'пасмурно', 'Вечером на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой снегопад', 'Вечером будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'прохладно и сыро', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой дождь', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'небольшой туман', 'Вечером  возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'солнечно', 'Вечером  будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'пасмурно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'облачно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'переменная облачность', 'Вечером будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'прохладно и ветрено', 'Вечером  будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (5, 'дождь', 'Вечером на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 3);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'пасмурно', 'Вечером на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой снегопад', 'Вечером будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'прохладно и сыро', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой дождь', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'небольшой туман', 'Вечером  возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'солнечно', 'Вечером  будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'пасмурно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'облачно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'переменная облачность', 'Вечером будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'прохладно и ветрено', 'Вечером  будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (6, 'дождь', 'Вечером на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 3);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'пасмурно', 'Вечером на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'небольшой снегопад', 'Вечером будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'прохладно и сыро', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'небольшой дождь', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'небольшой туман', 'Вечером  возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'солнечно', 'Вечером  будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'пасмурно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'облачно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'переменная облачность', 'Вечером будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'прохладно и ветрено', 'Вечером  будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (7, 'дождь', 'Вечером на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 3);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'пасмурно', 'Вечером на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'небольшой снегопад', 'Вечером будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'прохладно и сыро', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'небольшой дождь', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'небольшой туман', 'Вечером  возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'солнечно', 'Вечером  будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'пасмурно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'облачно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'переменная облачность', 'Вечером будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'прохладно и ветрено', 'Вечером  будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (8, 'дождь', 'Вечером на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 3);
 
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'пасмурно', 'Вечером на улице плюс, но всё ещё прохладно, укутайтесь потеплее', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'небольшой снегопад', 'Вечером будьте осторожнее на дороге, ожидается гололёд, наденьте обувь, которая не скользит', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'прохладно и сыро', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'небольшой дождь', 'Вечером  будет противная погода, обязательно выберите подходящую одежду и обувь.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'небольшой туман', 'Вечером  возможны небольшие туманы и относительная прохлада, советуем надеть шарфик и не забыть про перчатки!', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'солнечно', 'Вечером  будет отличная погода для прогулки, но остерегайтесь холодного ветра, не забудьте надеть шапку', 3);
-INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'пасмурно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
+INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'облачно с прояснениями', 'Вечером  возможно кратковременное появление солнца, не забудьте солнцезащитные очки', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'переменная облачность', 'Вечером будет плюсовая температура, но лучше надеть многослойную одежду для комфорта', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'прохладно и ветрено', 'Вечером  будет хорошая погода для прогулки, но ещё достаточно прохладно, советуем отдать предпочтение теплому гардеробу.', 3);
 INSERT INTO weather_recommend (temp, description, recommend, ind) VALUES (9, 'дождь', 'Вечером на улице собирается дождь, не забудьте зонт, дождевик и непромокаемую обувь.', 3);
