@@ -11,7 +11,7 @@ git clone https://github.com/kivymd/KivyMD.git --depth 1 \
 cd KivyMD \
 pip install . 
 
-пример для Kivy(Ubuntu): \
+пример для Kivy (Ubuntu): \
 python -m pip install "kivy[base]" kivy_examples
 
 
