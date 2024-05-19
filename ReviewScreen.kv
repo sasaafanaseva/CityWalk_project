@@ -1,0 +1,71 @@
+<ReviewScreen>
+    email: email
+    label: label
+
+    MDLabel:
+        id: label
+        text: 'Пожалуйста, оставьте отзыв на маршрут'
+        pos_hint:{"center_x":.5,"center_y":.75}
+        halign:"center"
+        text_color: "pink"
+        font_style:"Title"
+        
+
+    TextInput:
+        id: email
+        hint_text: 'напишите о том, что вам больше всего (не)понравилось'
+        multiline: False
+        size_hint: 0.6, 0.35
+        pos_hint: {'center_x': .5, 'center_y': .35}
+
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .23, 'center_y': .62}
+        on_release: root.send_email()
+        MDButtonIcon:
+            icon: "unfilledstar"
+    
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .28, 'center_y': .62}
+        on_release: root.send_email()
+        MDButtonIcon:
+            icon: "unfilledstar"
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .33, 'center_y': .62}
+        on_release: root.send_email()
+        MDButtonIcon:
+            icon: "unfilledstar"
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .38, 'center_y': .62}
+        on_release: root.send_email()
+        MDButtonIcon:
+            icon: "unfilledstar"
+
+    MDButton:
+        halign: "center"
+        pos_hint: {'center_x': .43, 'center_y': .62}
+        on_release: root.send_email()
+        MDButtonIcon:
+            icon: "unfilledstar"
+
+
+    MDButton:
+        pos_hint: {'center_x': .7, 'center_y': .1}
+        halign: "center"
+        on_release: root.manager.current = 'main'
+        MDButtonIcon:
+            icon: "out"
+
+    MDButton:
+        pos_hint: {'center_x': .5, 'center_y': .1}
+        halign: "center"
+        on_release: root.manager.current = 'main'
+        MDButtonText: 
+            text:"подтвердить"
+
