@@ -28,7 +28,7 @@ from merged_kv import load_kv_files
 load_kv_files()
 
 try:
-    conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='localhost',
+    conn = psycopg2.connect(dbname='', user='', password='', host='localhost',
                             port='5432', options='-c search_path=project_db')
     conn.autocommit = True
 
@@ -37,6 +37,8 @@ except Exception as e:
 
 user_email = ''
 
+
+#экран регистрации пользователя
 class RegisterScreen(Screen):
     def registration(self) -> None:
         self.label.text = 'Sign up'
@@ -65,14 +67,15 @@ class RegisterScreen(Screen):
         cursor.close()
 
 
+#первый экран входа пользователя
 class MainScreen(Screen):
     def login(self) -> None:
         self.label_log.text = 'Please login'
         email = self.ids.name.text  # почему именно здесь не работает без ids а в остальных местах ок?
         password = self.password.text
+        
         global user_email
         user_email = email
-
         cursor = conn.cursor(cursor_factory=NamedTupleCursor)
         cursor.execute("SELECT * FROM users WHERE email = %s ", (email,))
         existing_user = cursor.fetchone()
@@ -101,14 +104,16 @@ async def set_panel_list() -> None:
     history_screen = app.root.get_screen('history')
     history_screen.ids.my_container.add_widget(ExpansionPanelItem())
 
+
 mass_weather = []
+#экран погоды, работа с API openweathermap 
 class WeatherScreen(Screen):
     def get_city_id(self, s_city_name: str) -> int:
         city_id = 0
         try:
             res = requests.get("http://api.openweathermap.org/data/2.5/find",
                                params={'q': s_city_name, 'type': 'like', 'units': 'metric', 'lang': 'ru',
-                                       'APPID': "2b7382bcf96880be18e9dc1be22b5287"})
+                                       'APPID': "YOUR_APP_KEY"})
             data = res.json()
             cities = ["{} ({})".format(d['name'], d['sys']['country'])
                       for d in data['list']]
@@ -123,7 +128,7 @@ class WeatherScreen(Screen):
         try:
             res = requests.get("http://api.openweathermap.org/data/2.5/forecast",
                                params={'id': city_id, 'units': 'metric', 'lang': 'ru',
-                                       'APPID': "2b7382bcf96880be18e9dc1be22b5287",
+                                       'APPID': "YOUR_APP_KEY",
                                        'dt': '2024-03-30'})
             data = res.json()
             for i in data['list']:
@@ -315,7 +320,7 @@ def global_create_map_html(points: list) -> None:
     
     <body>
     <div id="map" style="width: 650px; height: 550px"></div>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=50249262-df67-4c59-9a72-639cc6170daf&lang=ru_RU"
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_APP_KEY&lang=ru_RU"
             type="text/javascript">
     </script>
     <script src="custom_view.js" type="text/javascript"></script>
@@ -387,7 +392,7 @@ def global_create_map_html(points: list) -> None:
 
 
 def geocoder(point: str) -> List:
-    new_url = 'https://search-maps.yandex.ru/v1/?&type=biz&lang=ru_RU&apikey=91165e16-5d01-4ca1-8a5d-49779363a0f8'
+    new_url = 'https://search-maps.yandex.ru/v1/?&type=biz&lang=ru_RU&apikey=YOUR_APP_KEY'
     try:
         params = {'text': 'Санкт-Петербург' + point}
         response = requests.get(new_url, params=params)
@@ -414,8 +419,7 @@ def global_get_points(points: list) -> List:
 
 ind = 0.5
 k = 2
-
-
+#экран маршрутизации, работа с Яндекс API
 class RouteScreen(Screen):
     def save_route(self) -> None:
         cursor = conn.cursor(cursor_factory=NamedTupleCursor)
@@ -476,7 +480,7 @@ class RouteScreen(Screen):
             ind = ind - 0.1
     pass
 
-
+#экран персонализированных рекомендаций
 class RecommendScreen(Screen):
 
     def get_my_point(self, point: list) -> None:
@@ -490,7 +494,7 @@ class RecommendScreen(Screen):
         
         <body>
         <div id="map" style="width: 650px; height: 550px"></div>
-        <script src="https://api-maps.yandex.ru/2.1/?apikey=50249262-df67-4c59-9a72-639cc6170daf&lang=ru_RU"
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_APP_KEY&lang=ru_RU"
                 type="text/javascript">
         </script>
         <script src="custom_view.js" type="text/javascript"></script>
@@ -533,7 +537,7 @@ class RecommendScreen(Screen):
 
     def show_point_ver2(self, i: int) -> None:
         res = requests.get(
-            "https://kudago.com/public-api/v1.4/events/?lang=ru&fields= id,title,description,site_url&text_format=text&location=spb&actual_since=3444385206")
+            "https://kudago.com/public-api/v1.4/events/?lang=ru&fields=id,title,description,site_url&text_format=text&location=spb&actual_since=3444385206")
         data = res.json()
         webview.create_window('point-2', data["results"][i]["site_url"], width=700, height=600)
         webview.start()
@@ -585,8 +589,9 @@ class TrailingPressedIconButton(
 my_points = []
 final_text = []
 
+#подключение и работа с 2Gis
 def get_duration(data: dict[str, list | str]) -> List:
-    url = 'https://routing.api.2gis.com/get_dist_matrix?key=c0b1d2ec-c03d-4bc3-bfa2-b11158d17b9f&version=2.0'
+    url = 'https://routing.api.2gis.com/get_dist_matrix?key=YOUR_APP_KEY&version=2.0'
     headers = {'Content-Type': 'application/json'}
     kl = 0
     for point in my_points:
@@ -736,7 +741,6 @@ class History2Screen(Screen):
         screen = app.root.get_screen("comments")
         cursor = conn.cursor(cursor_factory=NamedTupleCursor)
         label = str(self.ids["text_" + str(index)].text)
-
         cursor.execute('SELECT rating FROM rating WHERE organization = %s AND person = %s', (label, user_email))
         take_grade = cursor.fetchall()
         if take_grade != []:
