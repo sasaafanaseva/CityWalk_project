@@ -13,9 +13,12 @@ asynckivy \
 psycopg2 
 
 Также вставить YOUR_API_KEY от: \
-Яндекс API : https://yandex.ru/maps-api/products/js-api \
+Яндекс API : \
+https://yandex.ru/maps-api/products/js-api \
+https://yandex.ru/maps-api/products/geocoder-api\
 2Gis : https://docs.2gis.com/ru/api/navigation/distance-matrix/overview \
 OpenWeatherMap : https://openweathermap.org/api/hourly-forecast \
+
 
 Подключиться и заполнить БД: \
 1. подключиться к PostgreSQL с вашим именем и паролем \
