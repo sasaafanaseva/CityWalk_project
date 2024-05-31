@@ -17,10 +17,10 @@ psycopg2
 https://yandex.ru/maps-api/products/js-api \
 https://yandex.ru/maps-api/products/geocoder-api \
 2Gis : https://docs.2gis.com/ru/api/navigation/distance-matrix/overview \
-OpenWeatherMap : https://openweathermap.org/api/hourly-forecast \
+OpenWeatherMap : https://openweathermap.org/api/hourly-forecast 
 
 
-Подключиться и заполнить БД: \
+Подключиться и заполнить БД: 
 1. подключиться к PostgreSQL с вашим именем и паролем \
 2. скопировать содержимое файла bd.sql в консоль и запустить отдельно \
 
