@@ -21,8 +21,8 @@ OpenWeatherMap : https://openweathermap.org/api/hourly-forecast
 
 
 Подключиться и заполнить БД: 
-1. подключиться к PostgreSQL с вашим именем и паролем \
-2. скопировать содержимое файла bd.sql в консоль и запустить отдельно \
+1. подключиться к PostgreSQL с вашим именем и паролем 
+2. скопировать содержимое файла bd.sql в консоль и запустить отдельно 
 
 И конечно же для запуска необходимо установить Kivy и KivyMD последних версий, пример для KivyMD (Ubuntu): \
 git clone https://github.com/kivymd/KivyMD.git --depth 1 \
