@@ -15,43 +15,71 @@
                 icon: "map-search-outline"
 
         MDNavigationItem:
-            on_release: root.manager.current = 'recomend'
+            on_release: root.manager.current = 'recommend'
             MDNavigationItemIcon:
                 icon: "star-four-points"
 
     FloatLayout:
         orientation: 'vertical'
+        id: box
 
         MDLabel:
             id: label_id
-            text: "CityWalk"
-            font_size: 30
+            text: "Создайте новый маршрут!"
+            size_hint: (0.5, 0.3)
             halign: "center"
-            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+            pos_hint: {'center_x': 0.5, 'center_y': 0.93}
             text_color: "white"
 
 
         MDTextField:
-            id: text_input_a_id
+            id: point1
             multiline: False
-            font_size: 30
-            size_hint_x: 0.3
-            pos_hint: {'center_x': 0.5, 'top': 0.7}
-            hint_text: 'откуда'
+            size_hint: (0.3, 0.01)
+            pos_hint: {'center_x': 0.5, 'top': 0.85}
+            hint_text: ''
 
         MDTextField:
-            id: text_input_b_id
+            id: point2
             multiline: False
-            font_size: 30
-            size_hint_x: .3
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            hint_text: 'куда'
+            size_hint: (0.3, 0.01)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+            hint_text: ''
+
+        MDTextField:
+            pos_hint: {'center_x': 0.5, 'center_y': -0.7}
+            id: point3
+
+        MDTextField:
+            pos_hint: {'center_x': 0.5, 'center_y': -0.7}
+            id: point4
+
+        MDTextField:
+            pos_hint: {'center_x': 0.5, 'center_y': -0.7}
+            id: point5
+
+        MDTextField:
+            pos_hint: {'center_x': 0.5, 'center_y': -0.7}
+            id: point6
 
 
         MDButton:
+            id: button_add
             style: "elevated"
             size_hint: (0.15, 0.15)
-            pos_hint: {"center_x": .5, "center_y": .35}
+            pos_hint: {"center_x": .5, "center_y": .6}
+            on_release: root.add_point()
+
+            MDButtonIcon:
+                icon: "plus"
+                pos_hint: {"center_x": .5, "center_y": .5}
+
+
+        MDButton:
+            id: button
+            style: "elevated"
+            size_hint: (0.15, 0.15)
+            pos_hint: {"center_x": .5, "center_y": .2}
             on_release: root.Push()
 
             MDButtonIcon:
@@ -61,3 +89,14 @@
                 text: "Create"
                 font_size: 30
                 text_color: "purple"
+
+        MDButton:
+            style: "elevated"
+            size_hint: (0.10, 0.10)
+            pos_hint: {"center_x": .5, "center_y": .12}
+            on_release: root.manager.current = 'history'
+
+            MDButtonText:
+                id: button_id
+                text: "история маршрутов"
+                font_size: 30
