@@ -1,19 +1,30 @@
 # CityWalk_project
 
 проект основывается на библиотеке для создания android приложений: Kivy =>
-1. файл с отображением экранов: my.kv (финальная версия дизайна собрана в один файл для удобства)
-2. файл main.py с реализацией всех функций (для запуска нужны соответствующие импортированные библиотеки и API-KEYS от Яндекс Javascript-api, Яндекс поиск по организациям, Погода openweathermap)
-3. Для работы с базой данных используем psycopg2 (создание базы в файле bd.sql), для запуска нужно подключиться со своим паролем.
+1. файлы CommentsScreen.kv, History2Screen.kv, HistoryScreen.kv, MainScreen.kv, RecommendationScreen.kv, RegisterScreen.kv, RouteScreen.kv, WeatherScreen.kv -- нужны для отображения экранов
+2. они подключаются к main.py через merget_kv.py
+3. файл main.py с реализацией всех функций (при запуске main запустится работа приложения)
 
+Для успешного запуска необходимо установить соответствующие библиотеки:
+webview-android==0.10 \
+requests \
+bcrypt \
+asynckivy \
+psycopg2 \
 
-Для запуска нужно установить Kivy и KivyMD последних версий, пример для KivyMD (Ubuntu): \
+Также вставить YOUR_API_KEY от: \
+Яндекс API : https://yandex.ru/maps-api/products/js-api \
+2Gis : https://docs.2gis.com/ru/api/navigation/distance-matrix/overview \
+OpenWeatherMap : https://openweathermap.org/api/hourly-forecast \
+
+Подключиться и заполнить БД: \
+1. подключиться к PostgreSQL с вашим именем и паролем \
+2. скопировать содержимое файла bd.sql в консоль и запустить отдельно \
+
+И конечно же для запуска необходимо установить Kivy и KivyMD последних версий, пример для KivyMD (Ubuntu): \
 git clone https://github.com/kivymd/KivyMD.git --depth 1 \
 cd KivyMD \
 pip install . 
 
 пример для Kivy (Ubuntu): \
 python -m pip install "kivy[base]" kivy_examples
-
-
-Помимо этого импортируются  webview-android==0.10, requests, bcrypt, asynckivy \
-Также обязательно подключиться к базе, создать и заполнить все таблицы перед запуском приложения
