@@ -1,0 +1,156 @@
+<MDExpansionPanel>:
+    id: panel
+    adaptive_size: True
+
+    MDExpansionPanelHeader:
+
+        MDListItem:
+            theme_bg_color: "Custom"
+            md_bg_color: self.theme_cls.surfaceContainerLowColor
+            ripple_effect: False
+
+            MDListItemSupportingText:
+                text: "выберите один из маршрутов"
+
+            TrailingPressedIconButton:
+                id: chevron
+                icon: "chevron-right"
+                on_release: app.tap_expansion_chevron(panel, chevron)
+
+    MDExpansionPanelContent:
+        orientation: "vertical"
+        padding: "6dp", 0, "3dp", 0
+
+        MDLabel:
+            text: "информация о маршруте:"
+            text_color: "white"
+            adaptive_height: True
+            padding_x: "6dp"
+            padding_y: "3dp"
+
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon1
+            MDListItemHeadlineText:
+                id: text1
+                adaptive_width: True
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 1)
+
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon2
+            MDListItemHeadlineText:
+                id: text2
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 2)
+
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon3
+            MDListItemHeadlineText:
+                id: text3
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 3)
+
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon4
+            MDListItemHeadlineText:
+                id: text4
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 4)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon5
+            MDListItemHeadlineText:
+                id: text5
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 5)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon6
+            MDListItemHeadlineText:
+                id: text6
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 6)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon7
+            MDListItemHeadlineText:
+                id: text7
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 7)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon8
+            MDListItemHeadlineText:
+                id: text8
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 8)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon9
+            MDListItemHeadlineText:
+                id: text9
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 9)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon10
+            MDListItemHeadlineText:
+                id: text10
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 10)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon11
+            MDListItemHeadlineText:
+                id: text11
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 11)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon12
+            MDListItemHeadlineText:
+                id: text12
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 12)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon13
+            MDListItemHeadlineText:
+                id: text13
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 13)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon14
+            MDListItemHeadlineText:
+                id: text14
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 14)
+        MDListItem:
+            MDListItemLeadingIcon:
+                id: icon15
+            MDListItemHeadlineText:
+                id: text15
+            MDListItemTrailingCheckbox:
+                on_active: root.on_checkbox_active(*args, 15)
+
+
+
+<HistoryScreen>:
+    MDIconButton:
+        id: button
+        icon: "chevron-left"
+        style: "standard"
+        pos_hint: {"center_x": 0.02, "center_y": .1}
+        on_release: root.change_screen()
+
+    ScrollView:
+        id: screen
+        size_hint_x: .9
+        pos_hint: {"center_x": .5, "center_y": .5}
+        MDList:
+            id: my_container
