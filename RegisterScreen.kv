@@ -1,3 +1,4 @@
+
 <RegisterScreen>
     email: email
     label: label
@@ -9,9 +10,9 @@
         text: 'Sign up'
         pos_hint:{"center_x":.5,"center_y":.75}
         halign:"center"
-        text_color: "pink"
+        text_color: "white"
         font_style:"Title"
-        
+
     TextInput:
         id: email
         hint_text: 'enter your email'
@@ -27,8 +28,8 @@
         pos_hint: {'center_x': .5, 'center_y': .5}
         multiline: False
         password: True
-        
-    
+
+
     TextInput:
         id: password_second
         hint_text: 'repeat password'
@@ -42,7 +43,7 @@
         halign: "center"
         pos_hint: {'center_x': .5, 'center_y': .3}
         on_release: root.registration()
-        MDButtonText: 
+        MDButtonText:
             text:"  Register  "
 
 
@@ -50,5 +51,5 @@
         pos_hint: {'center_x': .5, 'center_y': .2}
         halign: "center"
         on_release: root.manager.current = 'main'
-        MDButtonText: 
+        MDButtonText:
             text:"back to login"
