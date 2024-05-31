@@ -10,7 +10,7 @@ webview-android==0.10 \
 requests \
 bcrypt \
 asynckivy \
-psycopg2 \
+psycopg2 
 
 Также вставить YOUR_API_KEY от: \
 Яндекс API : https://yandex.ru/maps-api/products/js-api \
